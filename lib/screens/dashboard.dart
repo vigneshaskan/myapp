@@ -1,11 +1,15 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class DashboardScreen extends StatelessWidget {
   final String emailOrUsername;
   final String password;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  DashboardScreen({required this.emailOrUsername, required this.password});
+  DashboardScreen({super.key, required this.emailOrUsername, required this.password});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +32,7 @@ class DashboardScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              emailOrUsername != '' ?
-              'Welcome, $emailOrUsername' : 'Welcome',
+              'Welcome',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24.0,
@@ -47,13 +50,15 @@ class DashboardScreen extends StatelessWidget {
             SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () {
+                signOutFromGoogle();
+                Navigator.pop(context);
               },
               child: Text(
                 'Logout',
                 style: TextStyle(color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                backgroundColor: Colors.white,
               ),
             ),
           ],
@@ -61,4 +66,28 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+  Future<String?> signInwithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+      await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      await _auth.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      throw e;
+    }
+    return null;
+  }
+
+  Future<void> signOutFromGoogle() async{
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+    FirebaseAnalytics.instance.logEvent(name: 'logout');
+  }
 }
+

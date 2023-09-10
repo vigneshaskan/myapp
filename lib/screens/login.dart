@@ -54,15 +54,18 @@ void signIn(BuildContext context) async{
 
   Future<void> loginWithFingerprint() async {
     final biometricAuth = BiometricAuth();
-    String? emailOrUsername = _email;
-    String? password = _password;
-    await biometricAuth.authenticate(context, emailOrUsername!, password!);
+    String? emailOrUsername = 'testuser@myapp.com';
+    String? password = 'test@123';
+    await biometricAuth.authenticate(context, emailOrUsername, password);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Text(
           'Login',
           style: TextStyle(color: Colors.black),

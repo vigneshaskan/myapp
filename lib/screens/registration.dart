@@ -20,10 +20,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }).then((authUser) {
       if (authUser.user != null) {
         print(authUser.user?.email);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LoginScreen()));
+        Navigator.pop(context);
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => LoginScreen()));
       }
     });
   }

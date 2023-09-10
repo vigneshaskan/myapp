@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/dashboard.dart';
+import 'package:myapp/screens/camera_screen.dart';
+import 'package:myapp/screens/image_processing.dart';
+import 'package:myapp/screens/location.dart';
 import 'package:myapp/screens/login.dart';
+import 'package:myapp/screens/push_notification.dart';
 import 'package:myapp/screens/registration.dart';
+import 'package:myapp/screens/social_login_screen.dart';
 
 class FeatureListScreen extends StatelessWidget {
   final Map<String, Widget> _featureScreens = {
-    'Login using fingerprint': LoginScreen(),
+    'Login': LoginScreen(),
     'User Authentication': RegistrationScreen(),
+    'Push Notifications' : PushNotificationScreen(),
+    'Geolocation' : LocationPage(),
+    'Camera Integration': CameraPage(),
+    'Image Processing': ImageProcessingScreen(),
+    'Social Media login': SocialLoginScreen(),
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         backgroundColor: Colors.white,
         title: Text('Feature List', style: TextStyle(color: Colors.black),),
       ),
       body: Container(
-        height: double.infinity,
         child: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
             final featureDescription = _featureDescriptions[index];
@@ -52,7 +64,7 @@ class FeatureListScreen extends StatelessWidget {
 }
 
 List<String> _featureDescriptions = [
-  'Login using fingerprint',
+  'Login',
   'User Authentication',
   'Push Notifications',
   'Geolocation',
